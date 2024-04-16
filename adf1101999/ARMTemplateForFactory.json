@@ -7,13 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf1101999"
 		},
-		"source linked service_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'source linked service'"
-		},
 		"destinationlinkedservice_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'destinationlinkedservice'"
+		},
+		"source linked service_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'source linked service'"
 		}
 	},
 	"variables": {
@@ -102,17 +102,31 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/source linked service')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/destinationdataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "destinationlinkedservice",
+					"type": "LinkedServiceReference"
+				},
 				"annotations": [],
-				"type": "AzureBlobStorage",
+				"type": "DelimitedText",
 				"typeProperties": {
-					"connectionString": "[parameters('source linked service_connectionString')]"
-				}
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "destinationcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/destinationlinkedservice')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sourcedataset')]",
@@ -157,31 +171,17 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/destinationdataset')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/source linked service')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "destinationlinkedservice",
-					"type": "LinkedServiceReference"
-				},
 				"annotations": [],
-				"type": "DelimitedText",
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"container": "destinationcontainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
+					"connectionString": "[parameters('source linked service_connectionString')]"
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/destinationlinkedservice')]"
-			]
+			"dependsOn": []
 		}
 	]
 }

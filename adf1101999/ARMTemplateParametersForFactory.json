@@ -5,10 +5,10 @@
 		"factoryName": {
 			"value": "adf1101999"
 		},
-		"source linked service_connectionString": {
+		"destinationlinkedservice_connectionString": {
 			"value": ""
 		},
-		"destinationlinkedservice_connectionString": {
+		"source linked service_connectionString": {
 			"value": ""
 		}
 	}

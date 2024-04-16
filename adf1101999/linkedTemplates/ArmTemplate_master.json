@@ -7,13 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf1101999"
 		},
-		"source linked service_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'source linked service'"
-		},
 		"destinationlinkedservice_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'destinationlinkedservice'"
+		},
+		"source linked service_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'source linked service'"
 		},
 		"containerUri": {
 			"type": "string",
@@ -42,11 +42,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"source linked service_connectionString": {
-						"value": "[parameters('source linked service_connectionString')]"
-					},
 					"destinationlinkedservice_connectionString": {
 						"value": "[parameters('destinationlinkedservice_connectionString')]"
+					},
+					"source linked service_connectionString": {
+						"value": "[parameters('source linked service_connectionString')]"
 					}
 				}
 			},
