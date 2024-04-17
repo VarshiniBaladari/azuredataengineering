@@ -1,0 +1,25 @@
+{
+	"name": "storage event trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Copy Data Pipeline",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/sourcecontainer/blobs/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/5bab9e68-8ade-4cd0-aed6-8c52ab703b24/resourceGroups/adf-rg/providers/Microsoft.Storage/storageAccounts/adfvarshini1101999",
+			"events": [
+				"Microsoft.Storage.BlobCreated",
+				"Microsoft.Storage.BlobDeleted"
+			]
+		}
+	}
+}
