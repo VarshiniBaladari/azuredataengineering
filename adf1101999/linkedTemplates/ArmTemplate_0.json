@@ -14,6 +14,10 @@
 		"source linked service_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'source linked service'"
+		},
+		"storage event trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/5bab9e68-8ade-4cd0-aed6-8c52ab703b24/resourceGroups/adf-rg/providers/Microsoft.Storage/storageAccounts/adfvarshini1101999"
 		}
 	},
 	"variables": {
@@ -181,6 +185,37 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/sourcedataset')]",
 				"[concat(variables('factoryId'), '/datasets/destinationdataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/storage event trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Copy Data Pipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/sourcecontainer/blobs/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('storage event trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated",
+						"Microsoft.Storage.BlobDeleted"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Copy Data Pipeline')]"
 			]
 		}
 	]

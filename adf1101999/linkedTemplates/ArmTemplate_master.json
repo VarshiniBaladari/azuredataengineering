@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'source linked service'"
 		},
+		"storage event trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/5bab9e68-8ade-4cd0-aed6-8c52ab703b24/resourceGroups/adf-rg/providers/Microsoft.Storage/storageAccounts/adfvarshini1101999"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -47,6 +51,9 @@
 					},
 					"source linked service_connectionString": {
 						"value": "[parameters('source linked service_connectionString')]"
+					},
+					"storage event trigger_properties_typeProperties_scope": {
+						"value": "[parameters('storage event trigger_properties_typeProperties_scope')]"
 					}
 				}
 			},

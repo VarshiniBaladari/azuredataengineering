@@ -10,6 +10,9 @@
 		},
 		"source linked service_connectionString": {
 			"value": ""
+		},
+		"storage event trigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/5bab9e68-8ade-4cd0-aed6-8c52ab703b24/resourceGroups/adf-rg/providers/Microsoft.Storage/storageAccounts/adfvarshini1101999"
 		}
 	}
 }
