@@ -5,11 +5,20 @@
 			"referenceName": "destinationlinkedservice",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"outputfname": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().outputfname",
+					"type": "Expression"
+				},
 				"container": "destinationcontainer"
 			},
 			"columnDelimiter": ",",
