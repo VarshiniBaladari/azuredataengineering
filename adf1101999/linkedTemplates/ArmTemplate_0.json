@@ -59,11 +59,20 @@
 					"referenceName": "destinationlinkedservice",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"outputfname": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().outputfname",
+							"type": "Expression"
+						},
 						"container": "destinationcontainer"
 					},
 					"columnDelimiter": ",",
@@ -86,12 +95,20 @@
 					"referenceName": "source linked service",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"inputfname": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "cities.txt",
+						"fileName": {
+							"value": "@dataset().inputfname",
+							"type": "Expression"
+						},
 						"folderPath": "source",
 						"container": "sourcecontainer"
 					},
@@ -162,20 +179,38 @@
 							{
 								"referenceName": "sourcedataset",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"inputfname": {
+										"value": "@pipeline().parameters.pipelineinfname",
+										"type": "Expression"
+									}
+								}
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "destinationdataset",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"outputfname": {
+										"value": "@pipeline().parameters.pipelineoutfname",
+										"type": "Expression"
+									}
+								}
 							}
 						]
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"pipelineinfname": {
+						"type": "string"
+					},
+					"pipelineoutfname": {
+						"type": "string"
+					}
 				},
 				"folder": {
 					"name": "Copy Data"
