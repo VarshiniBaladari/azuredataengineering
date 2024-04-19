@@ -51,13 +51,7 @@
 				"inputs": [
 					{
 						"referenceName": "sourcedataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"inputfname": {
-								"value": "@pipeline().parameters.pipelineinfname",
-								"type": "Expression"
-							}
-						}
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
@@ -65,8 +59,8 @@
 						"referenceName": "destinationdataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"outputfname": {
-								"value": "@pipeline().parameters.pipelineoutfname",
+							"folder": {
+								"value": "@pipeline().RunId",
 								"type": "Expression"
 							}
 						}
@@ -74,14 +68,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"pipelineinfname": {
-				"type": "string"
-			},
-			"pipelineoutfname": {
-				"type": "string"
-			}
-		},
 		"folder": {
 			"name": "Copy Data"
 		},

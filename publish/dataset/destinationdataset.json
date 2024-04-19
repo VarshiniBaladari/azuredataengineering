@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"outputfname": {
+			"folder": {
 				"type": "string"
 			}
 		},
@@ -15,8 +15,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "@dataset().outputfname",
+				"folderPath": {
+					"value": "@dataset().folder",
 					"type": "Expression"
 				},
 				"container": "destinationcontainer"
