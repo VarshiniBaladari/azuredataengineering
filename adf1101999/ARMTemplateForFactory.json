@@ -80,12 +80,7 @@
 							{
 								"referenceName": "sourcedataset",
 								"type": "DatasetReference",
-								"parameters": {
-									"inputfname": {
-										"value": "@pipeline().parameters.pipelineinfname",
-										"type": "Expression"
-									}
-								}
+								"parameters": {}
 							}
 						],
 						"outputs": [
@@ -93,8 +88,8 @@
 								"referenceName": "destinationdataset",
 								"type": "DatasetReference",
 								"parameters": {
-									"outputfname": {
-										"value": "@pipeline().parameters.pipelineoutfname",
+									"folder": {
+										"value": "@pipeline().RunId",
 										"type": "Expression"
 									}
 								}
@@ -104,14 +99,6 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"pipelineinfname": {
-						"type": "string"
-					},
-					"pipelineoutfname": {
-						"type": "string"
-					}
 				},
 				"folder": {
 					"name": "Copy Data"
@@ -133,7 +120,7 @@
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"outputfname": {
+					"folder": {
 						"type": "string"
 					}
 				},
@@ -142,8 +129,8 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().outputfname",
+						"folderPath": {
+							"value": "@dataset().folder",
 							"type": "Expression"
 						},
 						"container": "destinationcontainer"
@@ -168,20 +155,12 @@
 					"referenceName": "source linked service",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"inputfname": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().inputfname",
-							"type": "Expression"
-						},
+						"fileName": "happiness.csv",
 						"folderPath": "source",
 						"container": "sourcecontainer"
 					},
