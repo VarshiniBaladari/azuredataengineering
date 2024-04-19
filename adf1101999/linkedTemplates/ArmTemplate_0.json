@@ -100,7 +100,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "happiness.csv",
+						"fileName": "flowers2.txt",
 						"folderPath": "source",
 						"container": "sourcecontainer"
 					},
