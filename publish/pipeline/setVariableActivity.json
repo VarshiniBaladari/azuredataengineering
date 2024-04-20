@@ -1,0 +1,94 @@
+{
+	"name": "setVariableActivity",
+	"properties": {
+		"activities": [
+			{
+				"name": "lenghtV",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "length",
+					"value": {
+						"value": "@pipeline().parameters.lengthP",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "areaV",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "lenghtV",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "breadthV",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "area",
+					"value": {
+						"value": "@mul(variables('length'),variables('breadth') )",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "breadthV",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "breadth",
+					"value": {
+						"value": "@pipeline().parameters.breadthP",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"lengthP": {
+				"type": "int"
+			},
+			"breadthP": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"length": {
+				"type": "Integer"
+			},
+			"breadth": {
+				"type": "Integer"
+			},
+			"area": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "setVariableActivity"
+		},
+		"annotations": []
+	}
+}

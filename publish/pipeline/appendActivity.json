@@ -1,0 +1,69 @@
+{
+	"name": "appendActivity",
+	"properties": {
+		"activities": [
+			{
+				"name": "Append variable1",
+				"type": "AppendVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "input",
+					"value": {
+						"value": "@int(pipeline().parameters.appendP)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Append variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "output",
+					"value": {
+						"value": "@variables('input')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"appendP": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"input": {
+				"type": "Array",
+				"defaultValue": [
+					1,
+					2,
+					3,
+					4,
+					5,
+					6
+				]
+			},
+			"output": {
+				"type": "Array"
+			}
+		},
+		"folder": {
+			"name": "setVariableActivity"
+		},
+		"annotations": []
+	}
+}
