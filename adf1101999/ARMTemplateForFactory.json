@@ -111,6 +111,181 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/appendActivity')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Append variable1",
+						"type": "AppendVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "input",
+							"value": {
+								"value": "@int(pipeline().parameters.appendP)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Append variable1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "output",
+							"value": {
+								"value": "@variables('input')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"appendP": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"input": {
+						"type": "Array",
+						"defaultValue": [
+							1,
+							2,
+							3,
+							4,
+							5,
+							6
+						]
+					},
+					"output": {
+						"type": "Array"
+					}
+				},
+				"folder": {
+					"name": "setVariableActivity"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/setVariableActivity')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "lenghtV",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "length",
+							"value": {
+								"value": "@pipeline().parameters.lengthP",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "areaV",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "lenghtV",
+								"dependencyConditions": [
+									"Completed"
+								]
+							},
+							{
+								"activity": "breadthV",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "area",
+							"value": {
+								"value": "@mul(variables('length'),variables('breadth') )",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "breadthV",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "breadth",
+							"value": {
+								"value": "@pipeline().parameters.breadthP",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"lengthP": {
+						"type": "int"
+					},
+					"breadthP": {
+						"type": "int"
+					}
+				},
+				"variables": {
+					"length": {
+						"type": "Integer"
+					},
+					"breadth": {
+						"type": "Integer"
+					},
+					"area": {
+						"type": "Integer"
+					}
+				},
+				"folder": {
+					"name": "setVariableActivity"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/destinationdataset')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
