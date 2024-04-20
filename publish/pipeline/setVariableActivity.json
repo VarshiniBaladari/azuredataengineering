@@ -87,7 +87,7 @@
 			}
 		},
 		"folder": {
-			"name": "setVariableActivity"
+			"name": "Control Flow Activities"
 		},
 		"annotations": []
 	}

@@ -59,10 +59,13 @@
 			},
 			"output": {
 				"type": "Array"
+			},
+			"pname": {
+				"type": "String"
 			}
 		},
 		"folder": {
-			"name": "setVariableActivity"
+			"name": "Control Flow Activities"
 		},
 		"annotations": []
 	}
