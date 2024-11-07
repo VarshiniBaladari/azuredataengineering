@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf1101999"
 		},
+		"dataflowinput1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'dataflowinput1'"
+		},
 		"destinationlinkedservice_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'destinationlinkedservice'"
@@ -35,7 +39,7 @@
 		{
 			"name": "adf1101999_ArmTemplate_0",
 			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-02-01",
+			"apiVersion": "2024-03-01",
 			"properties": {
 				"mode": "incremental",
 				"templateLink": {
@@ -45,6 +49,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"dataflowinput1_connectionString": {
+						"value": "[parameters('dataflowinput1_connectionString')]"
 					},
 					"destinationlinkedservice_connectionString": {
 						"value": "[parameters('destinationlinkedservice_connectionString')]"

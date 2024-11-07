@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "adf1101999"
 		},
+		"dataflowinput1_connectionString": {
+			"value": ""
+		},
 		"destinationlinkedservice_connectionString": {
 			"value": ""
 		},
