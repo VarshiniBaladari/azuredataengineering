@@ -1,0 +1,7 @@
+{
+	"name": "Dataflow Inner join transformation",
+	"properties": {
+		"description": "we are looking at inner join transformation here",
+		"annotations": []
+	}
+}
