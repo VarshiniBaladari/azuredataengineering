@@ -1,0 +1,43 @@
+{
+	"name": "dataflow_derived_column_replace_nulls",
+	"properties": {
+		"description": "here in tis dataflow we are replacing the null values in a column with some data",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "salesdata",
+						"type": "DatasetReference"
+					},
+					"name": "datasetserivedcolumn"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "replacenullsalepersonfname"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          SalePersonFName as string,",
+				"          SalePersonLName as string,",
+				"          ProductName as string,",
+				"          ItemsSold as string,",
+				"          SoldPrice as string,",
+				"          SoldDate as string,",
+				"          City as string,",
+				"          State as string,",
+				"          Country as string,",
+				"          Region as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> datasetserivedcolumn",
+				"datasetserivedcolumn derive(SalePersonFName = iifNull(SalePersonFName, \"unknown\")) ~> replacenullsalepersonfname"
+			]
+		}
+	}
+}

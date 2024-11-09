@@ -1,0 +1,42 @@
+{
+	"name": "dataflow_schemadrift",
+	"properties": {
+		"description": "example of schema drift with just a source and sink.",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "datasetschemadrift"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "schemadriftsinkdataset",
+						"type": "DatasetReference"
+					},
+					"name": "schemadriftsink"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true) ~> datasetschemadrift",
+				"datasetschemadrift sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          empID as string,",
+				"          name as string,",
+				"          country as string,",
+				"          deptID as string,",
+				"          deptName as string",
+				"     ),",
+				"     partitionFileNames:['schemadrift_final csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> schemadriftsink"
+			]
+		}
+	}
+}
