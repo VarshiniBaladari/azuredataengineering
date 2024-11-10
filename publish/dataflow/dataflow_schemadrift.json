@@ -6,6 +6,10 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "salesdata",
+						"type": "DatasetReference"
+					},
 					"name": "datasetschemadrift"
 				}
 			],
@@ -20,9 +24,23 @@
 			],
 			"transformations": [],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          id as string,",
+				"          SalePersonFName as string,",
+				"          SalePersonLName as string,",
+				"          ProductName as string,",
+				"          ItemsSold as string,",
+				"          SoldPrice as string,",
+				"          SoldDate as string,",
+				"          City as string,",
+				"          State as string,",
+				"          Country as string,",
+				"          Region as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     inferDriftedColumnTypes: true) ~> datasetschemadrift",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false) ~> datasetschemadrift",
 				"datasetschemadrift sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
