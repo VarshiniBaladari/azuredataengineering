@@ -13,7 +13,15 @@
 					"name": "datasetderivedcolumn"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "JsonFileLinkedService",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "concatname"
@@ -45,7 +53,13 @@
 				"datasetderivedcolumn derive({Full name} = SalePersonFName + \" \" + SalePersonLName) ~> concatname",
 				"concatname derive(ConcatFullName = concatWS(\" \",SalePersonFName, SalePersonLName)) ~> ConcatColumWithFunc",
 				"ConcatColumWithFunc derive({Hierarchical Data} = @(City1=City,",
-				"          Region1=Region)) ~> HierarchicalData"
+				"          Region1=Region)) ~> HierarchicalData",
+				"HierarchicalData sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['HierarchicalData.json'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}

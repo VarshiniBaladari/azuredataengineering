@@ -13,7 +13,15 @@
 					"name": "datasetserivedcolumn"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "schemadriftsinkdataset",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "replacenullsalepersonfname"
@@ -36,7 +44,20 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> datasetserivedcolumn",
-				"datasetserivedcolumn derive(SalePersonFName = iifNull(SalePersonFName, \"unknown\")) ~> replacenullsalepersonfname"
+				"datasetserivedcolumn derive(SalePersonFName = iifNull(SalePersonFName, \"unknown\")) ~> replacenullsalepersonfname",
+				"replacenullsalepersonfname sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          empID as string,",
+				"          name as string,",
+				"          country as string,",
+				"          deptID as string,",
+				"          deptName as string",
+				"     ),",
+				"     partitionFileNames:['ReplaceNulls.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
