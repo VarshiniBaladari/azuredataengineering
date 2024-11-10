@@ -250,6 +250,98 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Hierarachical Data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Hierarchaical data",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow_derived_column",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"datasetderivedcolumn": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow_derived_column')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ReplaceNulls')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Replace nulls with derived columns",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow_derived_column_replace_nulls",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"datasetserivedcolumn": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow_derived_column_replace_nulls')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/appendActivity')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -326,6 +418,52 @@
 				"annotations": []
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/columnpattern')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow_column_pattern",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"columnpatterndataset": {},
+									"columnpatternsink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow_column_pattern')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/setVariableActivity')]",
@@ -465,6 +603,29 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/JsonFileLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "dataflowinput1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "dataflowoutput"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/dataflowinput1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dataset1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -570,6 +731,127 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/destinationlinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/salesdata')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "dataflowinput1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "sales_data.csv",
+						"container": "dataflowinput"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "SalePersonFName",
+						"type": "String"
+					},
+					{
+						"name": "SalePersonLName",
+						"type": "String"
+					},
+					{
+						"name": "ProductName",
+						"type": "String"
+					},
+					{
+						"name": "ItemsSold",
+						"type": "String"
+					},
+					{
+						"name": "SoldPrice",
+						"type": "String"
+					},
+					{
+						"name": "SoldDate",
+						"type": "String"
+					},
+					{
+						"name": "City",
+						"type": "String"
+					},
+					{
+						"name": "State",
+						"type": "String"
+					},
+					{
+						"name": "Country",
+						"type": "String"
+					},
+					{
+						"name": "Region",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/dataflowinput1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/schemadriftsinkdataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "dataflowinput1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "dataflowoutput"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "empID",
+						"type": "String"
+					},
+					{
+						"name": "name",
+						"type": "String"
+					},
+					{
+						"name": "country",
+						"type": "String"
+					},
+					{
+						"name": "deptID",
+						"type": "String"
+					},
+					{
+						"name": "deptName",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/dataflowinput1')]"
 			]
 		},
 		{
@@ -750,6 +1032,284 @@
 				"[concat(variables('factoryId'), '/datasets/dataset1')]",
 				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
 				"[concat(variables('factoryId'), '/datasets/datasetjoinedsink')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow_column_pattern')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "here we discuss about the how to apply a transformation on more than one column of table. Here we apply transformation on set of columns.",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "salesdata",
+								"type": "DatasetReference"
+							},
+							"name": "columnpatterndataset"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "schemadriftsinkdataset",
+								"type": "DatasetReference"
+							},
+							"name": "columnpatternsink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          id as short,",
+						"          SalePersonFName as string,",
+						"          SalePersonLName as string,",
+						"          ProductName as string,",
+						"          ItemsSold as short,",
+						"          SoldPrice as short,",
+						"          SoldDate as date,",
+						"          City as string,",
+						"          State as string,",
+						"          Country as string,",
+						"          Region as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> columnpatterndataset",
+						"columnpatterndataset derive(each(match(type=='string'), $$ + 'pattern' = trim($$, \".\"))) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          empID as string,",
+						"          name as string,",
+						"          country as string,",
+						"          deptID as string,",
+						"          deptName as string",
+						"     ),",
+						"     partitionFileNames:['columpattern.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> columnpatternsink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/salesdata')]",
+				"[concat(variables('factoryId'), '/datasets/schemadriftsinkdataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow_derived_column')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "here we are going to explore derived column transformations",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "salesdata",
+								"type": "DatasetReference"
+							},
+							"name": "datasetderivedcolumn"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "JsonFileLinkedService",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "concatname"
+						},
+						{
+							"name": "ConcatColumWithFunc"
+						},
+						{
+							"name": "HierarchicalData"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          id as string,",
+						"          SalePersonFName as string,",
+						"          SalePersonLName as string,",
+						"          ProductName as string,",
+						"          ItemsSold as string,",
+						"          SoldPrice as string,",
+						"          SoldDate as string,",
+						"          City as string,",
+						"          State as string,",
+						"          Country as string,",
+						"          Region as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> datasetderivedcolumn",
+						"datasetderivedcolumn derive({Full name} = SalePersonFName + \" \" + SalePersonLName) ~> concatname",
+						"concatname derive(ConcatFullName = concatWS(\" \",SalePersonFName, SalePersonLName)) ~> ConcatColumWithFunc",
+						"ConcatColumWithFunc derive({Hierarchical Data} = @(City1=City,",
+						"          Region1=Region)) ~> HierarchicalData",
+						"HierarchicalData sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['HierarchicalData.json'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/salesdata')]",
+				"[concat(variables('factoryId'), '/datasets/JsonFileLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow_derived_column_replace_nulls')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "here in tis dataflow we are replacing the null values in a column with some data",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "salesdata",
+								"type": "DatasetReference"
+							},
+							"name": "datasetserivedcolumn"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "schemadriftsinkdataset",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "replacenullsalepersonfname"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          id as string,",
+						"          SalePersonFName as string,",
+						"          SalePersonLName as string,",
+						"          ProductName as string,",
+						"          ItemsSold as string,",
+						"          SoldPrice as string,",
+						"          SoldDate as string,",
+						"          City as string,",
+						"          State as string,",
+						"          Country as string,",
+						"          Region as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> datasetserivedcolumn",
+						"datasetserivedcolumn derive(SalePersonFName = iifNull(SalePersonFName, \"unknown\")) ~> replacenullsalepersonfname",
+						"replacenullsalepersonfname sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          empID as string,",
+						"          name as string,",
+						"          country as string,",
+						"          deptID as string,",
+						"          deptName as string",
+						"     ),",
+						"     partitionFileNames:['ReplaceNulls.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/salesdata')]",
+				"[concat(variables('factoryId'), '/datasets/schemadriftsinkdataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow_schemadrift')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "example of schema drift with just a source and sink.",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "salesdata",
+								"type": "DatasetReference"
+							},
+							"name": "datasetschemadrift"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "schemadriftsinkdataset",
+								"type": "DatasetReference"
+							},
+							"name": "schemadriftsink"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          id as string,",
+						"          SalePersonFName as string,",
+						"          SalePersonLName as string,",
+						"          ProductName as string,",
+						"          ItemsSold as string,",
+						"          SoldPrice as string,",
+						"          SoldDate as string,",
+						"          City as string,",
+						"          State as string,",
+						"          Country as string,",
+						"          Region as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     inferDriftedColumnTypes: true,",
+						"     ignoreNoFilesFound: false) ~> datasetschemadrift",
+						"datasetschemadrift sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          empID as string,",
+						"          name as string,",
+						"          country as string,",
+						"          deptID as string,",
+						"          deptName as string",
+						"     ),",
+						"     partitionFileNames:['schemadrift_final csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> schemadriftsink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/salesdata')]",
+				"[concat(variables('factoryId'), '/datasets/schemadriftsinkdataset')]"
 			]
 		}
 	]
