@@ -1,0 +1,66 @@
+{
+	"name": "dataflow_derived_column",
+	"properties": {
+		"description": "here we are going to explore derived column transformations",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "salesdata",
+						"type": "DatasetReference"
+					},
+					"name": "datasetderivedcolumn"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "JsonFileLinkedService",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "concatname"
+				},
+				{
+					"name": "ConcatColumWithFunc"
+				},
+				{
+					"name": "HierarchicalData"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          SalePersonFName as string,",
+				"          SalePersonLName as string,",
+				"          ProductName as string,",
+				"          ItemsSold as string,",
+				"          SoldPrice as string,",
+				"          SoldDate as string,",
+				"          City as string,",
+				"          State as string,",
+				"          Country as string,",
+				"          Region as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> datasetderivedcolumn",
+				"datasetderivedcolumn derive({Full name} = SalePersonFName + \" \" + SalePersonLName) ~> concatname",
+				"concatname derive(ConcatFullName = concatWS(\" \",SalePersonFName, SalePersonLName)) ~> ConcatColumWithFunc",
+				"ConcatColumWithFunc derive({Hierarchical Data} = @(City1=City,",
+				"          Region1=Region)) ~> HierarchicalData",
+				"HierarchicalData sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['HierarchicalData.json'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

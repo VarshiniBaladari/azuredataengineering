@@ -1,0 +1,19 @@
+{
+	"name": "JsonFileLinkedService",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "dataflowinput1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "dataflowoutput"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
